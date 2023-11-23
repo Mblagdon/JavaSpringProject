@@ -2,12 +2,11 @@ package com.example.java3566project;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/student")
@@ -37,4 +36,15 @@ public class StudentController {
     public @ResponseBody Iterable<Student> getAllStudents() {
         return studentRepository.findAll();
     }
+
+    @GetMapping("/{id}")
+    public @ResponseBody ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+        Optional<Student> student = studentRepository.findById(id);
+        if (student.isPresent()) {
+            return ResponseEntity.ok(student.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
